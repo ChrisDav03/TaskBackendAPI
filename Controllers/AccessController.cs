@@ -30,7 +30,8 @@ namespace TaskBackendAPI.Controllers
             {
                 name = obj.Name,
                 email = obj.Email,
-                password = _utils.encriptSHA256(obj.Password)
+                password = _utils.encriptSHA256(obj.Password),
+                role = obj.Role
             };
             await _dbContext.Users.AddAsync(modelUser);
             await _dbContext.SaveChangesAsync();
@@ -53,7 +54,7 @@ namespace TaskBackendAPI.Controllers
             if(userFound == null)
                 return StatusCode(StatusCodes.Status200OK, new {isSuccess = false, token = ""});
             else
-                return StatusCode(StatusCodes.Status200OK, new { isSuccess = false, token = _utils.generateJWT(userFound) });
+                return StatusCode(StatusCodes.Status200OK, new { isSuccess = true, token = _utils.generateJWT(userFound) });
 
         }
 

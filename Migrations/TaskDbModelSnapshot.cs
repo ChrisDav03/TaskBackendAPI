@@ -24,66 +24,82 @@ namespace TaskBackendAPI.Migrations
 
             modelBuilder.Entity("TaskBackendAPI.Models.Task", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime?>("createdAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("description")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Status")
+                    b.Property<string>("status")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("title")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("UpdatedAt")
+                    b.Property<DateTime?>("updatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("UserAsignedId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int?>("userAsignedId")
+                        .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("id");
+
+                    b.HasIndex("userAsignedId");
 
                     b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("TaskBackendAPI.Models.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
-                    b.Property<string>("Email")
+                    b.Property<string>("email")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("password")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Role")
+                    b.Property<string>("role")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("TaskBackendAPI.Models.Task", b =>
+                {
+                    b.HasOne("TaskBackendAPI.Models.User", "userAssigned")
+                        .WithMany("Tasks")
+                        .HasForeignKey("userAsignedId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("userAssigned");
+                });
+
+            modelBuilder.Entity("TaskBackendAPI.Models.User", b =>
+                {
+                    b.Navigation("Tasks");
                 });
 #pragma warning restore 612, 618
         }

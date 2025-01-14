@@ -36,6 +36,7 @@ namespace TaskBackendAPI.Custom
             {
                 new Claim(ClaimTypes.NameIdentifier, model.id.ToString()),
                 new Claim(ClaimTypes.Email, model.email!),
+                new Claim(ClaimTypes.Role, model.role.ToString())
              };
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:key"]!));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);

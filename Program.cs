@@ -40,7 +40,13 @@ builder.Services.AddAuthentication(config =>
         (Encoding.UTF8.GetBytes(builder.Configuration["Jwt:key"]!))
     };
 });
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("NewPolicy", app =>
+    {
+        app.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -49,6 +55,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("NewPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 
