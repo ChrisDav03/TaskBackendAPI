@@ -12,8 +12,9 @@ namespace TaskBackendAPI.Models.DTOs
         public Status Status { get; set; }
         [JsonIgnore]
         public int? UserAssignedId { get; set; }
-        
-        public UserDTO UserAssigned { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public UserTaskDTO UserAssigned { get; set; }
 
     }
 }
