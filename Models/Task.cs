@@ -14,7 +14,7 @@ namespace TaskBackendAPI.Models
         public string title { get; set; }
         public string description { get; set; }
         public Status status { get; set; }
-        public int? userAsignedId { get; set; }
+        public int? userAssignedId { get; set; }
         public User userAssigned { get; set; }
         public DateTime? createdAt { get; set; }
         public DateTime? updatedAt { get; set; }

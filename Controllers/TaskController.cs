@@ -26,8 +26,24 @@ namespace TaskBackendAPI.Controllers
         [Route("List")]
         public async Task<IActionResult> List()
         {
-            var list = await _dbContext.Tasks.ToListAsync();
-            return StatusCode(StatusCodes.Status200OK, new {value = list});
+            var list = await _dbContext.Tasks
+                .Include(t => t.userAssigned)
+                .ToListAsync();
+            var taskDTOs = list.Select(task => new TaskDTO
+            {
+                Id = task.id,
+                Title = task.title,
+                Description = task.description,
+                Status = task.status,
+                UserAssigned = new UserDTO  // Assuming one user is assigned to the task
+                {
+                    Id = task.userAssigned.id,
+                    Name = task.userAssigned.name,
+                }
+            }).ToList();
+
+
+            return StatusCode(StatusCodes.Status200OK, new {value = taskDTOs});
         }
 
         [HttpPost]
@@ -39,7 +55,7 @@ namespace TaskBackendAPI.Controllers
                 title = obj.Title,
                 description = obj.Description,
                 status = obj.Status,
-                userAsignedId = obj.UserAsignedId,
+                userAssignedId = obj.UserAssignedId,
                 createdAt = DateTime.UtcNow,
                 updatedAt = DateTime.UtcNow
             };
@@ -51,7 +67,7 @@ namespace TaskBackendAPI.Controllers
             else
                 return StatusCode(StatusCodes.Status200OK, new { isSuccess = false });
         }
-        // GET: api/task/{id}
+
         [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> GetById(int id)
@@ -63,7 +79,6 @@ namespace TaskBackendAPI.Controllers
             return Ok(task);
         }
 
-        // PUT: api/task/update/{id}
         [HttpPut]
         [Route("Update/{id}")]
         public async Task<IActionResult> Update(int id, TaskDTO obj)
@@ -75,7 +90,7 @@ namespace TaskBackendAPI.Controllers
             task.title = obj.Title;
             task.description = obj.Description;
             task.status = obj.Status;
-            task.userAsignedId = obj.UserAsignedId;
+            task.userAssignedId = obj.UserAssignedId;
             task.updatedAt = DateTime.UtcNow;
 
             _dbContext.Tasks.Update(task);
@@ -84,7 +99,6 @@ namespace TaskBackendAPI.Controllers
             return StatusCode(StatusCodes.Status200OK, new { isSuccess = true });
         }
 
-        // DELETE: api/task/delete/{id}
         [HttpDelete]
         [Route("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)

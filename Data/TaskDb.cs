@@ -20,7 +20,7 @@ namespace TaskBackendAPI.Data
             modelBuilder.Entity<Models.Task>()
                 .HasOne(t => t.userAssigned)
                 .WithMany(u => u.Tasks)
-                .HasForeignKey(t => t.userAsignedId)
+                .HasForeignKey(t => t.userAssignedId)
                 .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Models.Task>()

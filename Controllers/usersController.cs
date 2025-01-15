@@ -31,14 +31,13 @@ namespace TaskBackendAPI.Controllers
                 Id = user.id,
                 Name = user.name,
                 Email = user.email,
-                Password = user.password,
                 Role = user.role,
                 Tasks = user.Tasks.Select(task => new TaskDTO
                 {
                     Title = task.title,
                     Description = task.description,
                     Status = task.status,
-                    UserAsignedId = task.userAsignedId
+                    UserAssignedId = task.userAssignedId
 
                 }).ToList()
             }).ToList();
